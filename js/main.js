@@ -79,6 +79,12 @@ const getRandomArrayElement = (elements) => {
   elements[getRandomInt(0, elements.length - 1)];
 };
 
+function getTwoDigitNumber(photoNumber) {
+  photoNumber = getRandomInt(1, 10);
+
+  return (photoNumber < 10) ? '0' + photoNumber : photoNumber;
+}
+
 const SIMILAR_AD_COUNT = 10;
 
 function createAd () {
@@ -87,7 +93,7 @@ function createAd () {
 
   return {
     author: {
-      avatar: 'img/avatars/user(07).png',
+      avatar: 'img/avatars/user(' + getTwoDigitNumber() + ').png',
     },
     offer: {
       title: getRandomArrayElement(TITLE),
