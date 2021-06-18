@@ -54,8 +54,6 @@ const MAX_LAT = 35.7;
 const MIN_LNG = 139.7;
 const MAX_LNG = 139.8;
 
-const SIMILAR_AD_COUNT = 10;
-
 function createAd () {
   const randomLat = getRandomFloat(MIN_LAT, MAX_LAT, 5);
   const randomLng = getRandomFloat(MIN_LNG, MAX_LNG, 5);
@@ -85,7 +83,6 @@ function createAd () {
       randomLng,
     },
   };
-
 }
 
-const simalarAds = new Array(SIMILAR_AD_COUNT).fill(null).map(() => createAd());
+export {createAd};
