@@ -21,9 +21,8 @@ function getRandomFloat(min, max, fValue) {
   return (min >= 0 || min < max) ? ((Math.random() * (max - min + 1)) + min).toFixed(fValue) : -1;
 }
 
-const getRandomArrayElement = (elements) => {
-  elements[getRandomInt(0, elements.length - 1)];
-};
+const getRandomArrayElement = (elements) => elements[getRandomInt(0, elements.length - 1)];
+
 
 function getTwoDigitNumber(photoNumber) {
   photoNumber = getRandomInt(1, 10);

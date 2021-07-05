@@ -74,9 +74,9 @@ function createAd () {
       guests: getRandomInt(0, 10),
       checkin: getRandomArrayElement(CHECKIN),
       checkout: getRandomArrayElement(CHECHOUT),
-      features: getRandomArrayElement(FEATURES),
+      features: [getRandomArrayElement(FEATURES)],
       description: getRandomArrayElement(DESCRIPTION),
-      photos: getRandomArrayElement(PHOTOS),
+      photos: [getRandomArrayElement(PHOTOS)],
     },
     location: {
       randomLat,
