@@ -24,26 +24,30 @@ export const getNewAd = (advertisement) => {
   const featureList = ad.querySelector('.popup__features');
   const photos = ad.querySelector('.popup__photos');
 
-  ad.querySelector('.popup__title').textContent = advertisement.offer.title;
-  ad.querySelector('.popup__text--address').textContent = advertisement.offer.address;
-  ad.querySelector('.popup__text--price').textContent = `${advertisement.offer.price}₽/ночь`;
-  ad.querySelector('.popup__type').textContent = getOfferType(advertisement.offer.type);
-  ad.querySelector('.popup__text--capacity').textContent = `${advertisement.offer.rooms} комнаты для ${advertisement.offer.guests} гостей`;
-  ad.querySelector('.popup__text--time').textContent = `Заезд после ${  advertisement.offer.checkin  }, выезд до ${  advertisement.offer.checkout}`;
+  advertisement.offer.title ? ad.querySelector('.popup__title').textContent = advertisement.offer.title : ad.querySelector('.popup__title').remove();
+  advertisement.offer.address.randomLat && advertisement.offer.address.randomLng ? ad.querySelector('.popup__text--address').textContent = `${advertisement.offer.address.randomLat}' Tōkyō-to, Chiyoda-ku, Ichibanchō, '${advertisement.offer.address.randomLng}` : ad.querySelector('.popup__text--address').remove();
+  advertisement.offer.price ? ad.querySelector('.popup__text--price').textContent = `${advertisement.offer.price}₽/ночь` : ad.querySelector('.popup__text--price').remove();
+  advertisement.offer.type ? ad.querySelector('.popup__type').textContent = getOfferType(advertisement.offer.type) : ad.querySelector('.popup__type').remove();
+  advertisement.offer.rooms && advertisement.offer.guests ? ad.querySelector('.popup__text--capacity').textContent = `${advertisement.offer.rooms} комнаты для ${advertisement.offer.guests} гостей` : ad.querySelector('.popup__text--capacity').remove();
+  advertisement.offer.checkin && advertisement.offer.checkout ? ad.querySelector('.popup__text--time').textContent = `Заезд после ${  advertisement.offer.checkin  }, выезд до ${  advertisement.offer.checkout}` : ad.querySelector('.popup__text--time').remove();
+
   //Удаление фич и их последующее добавление
   while(featureList.childElementCount > 0) {
     featureList.lastElementChild.remove();
   }
-  ad.offer.features.forEach(featureTitle => {
+  advertisement.offer.features.forEach(featureTitle => {
     const li = document.createElement('li');
     li.classList.add('popup__featute', `popup__featute--${featureTitle}`);
     featureList.appendChild(li);
   });
 
-  ad.querySelector('.popup__description').textContent = advertisement.offer.description;
+  advertisement.offer.description ? ad.querySelector('.popup__description').textContent = advertisement.offer.description : ad.querySelector('.popup__description').remove();
 
-  //Добавление фото
-  ad.offer.photos.forEach(photo => {
+  //Удаление фото и их последующее добавлени
+  while(photos.childElementCount > 0) {
+    photos.lastElementChild.remove();
+  }
+  advertisement.offer.photos.forEach(photo => {
     const img = document.createElement('img');
     img.classList.add('popup__photo');
     img.src = photo;
@@ -53,10 +57,7 @@ export const getNewAd = (advertisement) => {
     photos.appendChild(img);
   });
 
-  ad.querySelector('.popup__avatar').src = advertisement.author.avatar;
-
-  // Предусмотрите ситуацию, когда данных для заполнения не хватает.
-  // Например, отсутствует описание. В этом случае соответствующий блок в карточке скрывается.
+  advertisement.author.avatar ? ad.querySelector('.popup__avatar').src = advertisement.author.avatar : ad.querySelector('.popup__avatar').src = 'img/avatars/userDefault.png';
 
   return ad;
 };

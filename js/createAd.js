@@ -60,7 +60,7 @@ function createAd () {
 
   return {
     author: {
-      avatar: `img/avatars/user(${  getTwoDigitNumber()  }).png`,
+      avatar: `img/avatars/user${  getTwoDigitNumber()  }.png`,
     },
     offer: {
       title: getRandomArrayElement(TITLE),
