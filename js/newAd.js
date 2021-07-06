@@ -35,7 +35,7 @@ export const getNewAd = (advertisement) => {
   while(featureList.childElementCount > 0) {
     featureList.lastElementChild.remove();
   }
-  advertisement.offer.features.forEach(featureTitle => {
+  advertisement.offer.features.forEach((featureTitle) => {
     const li = document.createElement('li');
     li.classList.add('popup__featute', `popup__featute--${featureTitle}`);
     featureList.appendChild(li);
@@ -47,7 +47,7 @@ export const getNewAd = (advertisement) => {
   while(photos.childElementCount > 0) {
     photos.lastElementChild.remove();
   }
-  advertisement.offer.photos.forEach(photo => {
+  advertisement.offer.photos.forEach((photo) => {
     const img = document.createElement('img');
     img.classList.add('popup__photo');
     img.src = photo;
