@@ -105,36 +105,42 @@ const getMinPriceFromType = function () {
 getMinPriceFromType();
 
 //Смена кличества гостей от числа комнат
-const capacity = adForm.querySelector('#capacity');
-const numberOfTenant = capacity.querySelectorAll('option');
+// TASK 8.10
+const selectRoomNumber = adForm.querySelector( '#room_number');
 
-const getNumberOfTenant = function () {
-  const roomNumber = adForm.querySelector('#room_number');
-  roomNumber.addEventListener('change', function() {
-    if (this.value === '1') {
-      for (let i = 0; i < numberOfTenant.length; i++) {
-        numberOfTenant[i].value > 1 || numberOfTenant[i].value < 1 ? numberOfTenant[i].remove() : console.log(numberOfTenant.value);
-      }
-    }
+const selectCapacity= adForm.querySelector( '#capacity');
 
-    if (this.value === '2') {
-      for (let i = 0; i < numberOfTenant.length; i++) {
-        numberOfTenant[i].value > 2 || numberOfTenant[i].value === 0 ? numberOfTenant[i].remove() : console.log(numberOfTenant.value);
-      }
-    }
-
-    if (this.value === '3') {
-      for (let i = 0; i < numberOfTenant.length; i++) {
-        numberOfTenant[i].value > 3 || numberOfTenant[i].value === 0 ? numberOfTenant[i].remove() : console.log(numberOfTenant.value);
-      }
-    }
-
-    if (this.value === '100') {
-      for (let i = 0; i < numberOfTenant.length; i++) {
-        numberOfTenant[i].value > 0 ? numberOfTenant[i].remove() : console.log(numberOfTenant.value);
-      }
-    }
+const disableAllOptions = () => {
+  const selectCapacityOptions = selectCapacity.querySelectorAll( 'option');
+  selectCapacityOptions.forEach( ( option)=> {
+    option.setAttribute( 'disabled', '' );
   });
 };
+disableAllOptions();
+selectCapacity.querySelector( 'option[value="1"]' ).removeAttribute( 'disabled');
 
-getNumberOfTenant();
+const onSelectRoomNumberChange = ( evt ) => {
+
+  disableAllOptions();
+  switch ( evt.target.value ){
+    case '1':
+      selectCapacity.querySelector( 'option[value="1"]' ).removeAttribute( 'disabled');
+      break;
+    case '2':
+      selectCapacity.querySelector( 'option[value="1"]' ).removeAttribute( 'disabled');
+      selectCapacity.querySelector( 'option[value="2"]' ).removeAttribute( 'disabled');
+      break;
+    case '3':
+      selectCapacity.querySelector( 'option[value="1"]' ).removeAttribute( 'disabled');
+      selectCapacity.querySelector( 'option[value="2"]' ).removeAttribute( 'disabled');
+      selectCapacity.querySelector( 'option[value="3"]' ).removeAttribute( 'disabled');
+      break;
+    case '100':
+      selectCapacity.querySelector( 'option[value="0"]' ).removeAttribute( 'disabled');
+      break;
+
+    default:
+  }
+};
+
+selectRoomNumber.addEventListener( 'change', onSelectRoomNumberChange );
