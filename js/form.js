@@ -1,4 +1,44 @@
 const adForm = document.querySelector('.ad-form');
+const mapFiltersForm = document.querySelector( '.map__filters');
+const setDisabledState = () => {
+
+  // Форма заполнения информации об объявлении .ad-form содержит класс ad-form--disabled;
+  adForm.classList.add( 'ad-form--disabled');
+
+  // Все интерактивные элементы формы .ad-form должны быть заблокированы с помощью атрибута disabled, добавленного на них или на их родительские блоки fieldset;
+  const fieldsets = adForm.querySelectorAll( 'fieldset');
+  fieldsets.forEach( ( fieldset )=> {
+    fieldset.setAttribute( 'disabled', '');
+  });
+
+  // Форма с фильтрами .map__filters заблокирована так же, как и форма .ad-form — на форму добавлен специальный класс, а на её интерактивные элементы атрибуты disabled;
+  mapFiltersForm.classList.add( 'map__filters--disabled');
+
+  // const mapFiltersInputs = Array.from( mapFiltersForm.children );
+  const mapFiltersInputs = mapFiltersForm.querySelectorAll( 'select, fieldset ');
+  mapFiltersInputs.forEach( ( input ) => {
+    input.setAttribute( 'disabled', '');
+  });
+};
+setDisabledState();
+
+const setEnabledState = () => {
+  adForm.classList.remove( 'ad-form--disabled');
+
+  const fieldsets = adForm.querySelectorAll( 'fieldset');
+  fieldsets.forEach( ( fieldset )=> {
+    fieldset.removeAttribute( 'disabled' );
+  });
+
+  mapFiltersForm.classList.remove( 'map__filters--disabled');
+
+  const mapFiltersInputs = mapFiltersForm.querySelectorAll( 'select, fieldset ');
+  mapFiltersInputs.forEach( ( input ) => {
+    input.removeAttribute( 'disabled');
+  });
+};
+setEnabledState();
+
 
 //Валидация заголовка обьявления
 const adTitle = adForm.querySelector('input[name="title"]');
@@ -79,13 +119,13 @@ const getNumberOfTenant = function () {
 
     if (this.value === '2') {
       for (let i = 0; i < numberOfTenant.length; i++) {
-        numberOfTenant[i].value > 2 || numberOfTenant[i].value == 0 ? numberOfTenant[i].remove() : console.log(numberOfTenant.value);
+        numberOfTenant[i].value > 2 || numberOfTenant[i].value === 0 ? numberOfTenant[i].remove() : console.log(numberOfTenant.value);
       }
     }
 
     if (this.value === '3') {
       for (let i = 0; i < numberOfTenant.length; i++) {
-        numberOfTenant[i].value > 3 || numberOfTenant[i].value == 0 ? numberOfTenant[i].remove() : console.log(numberOfTenant.value);
+        numberOfTenant[i].value > 3 || numberOfTenant[i].value === 0 ? numberOfTenant[i].remove() : console.log(numberOfTenant.value);
       }
     }
 
