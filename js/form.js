@@ -37,19 +37,19 @@ const setEnabledState = () => {
 };
 
 //Валидация заголовка обьявления
-const adTitle = adForm.querySelector('input[name="title"]');
+const adTitle = adForm.querySelector('#title');
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 
-adTitle.addEventListener('input', () => {
-  const valueLength = adTitle.value.length;
+adTitle.addEventListener('input', (event) => {
+  const input = event.target;
+  const valueLength = input.value.length;
 
-  if (valueLength < MIN_TITLE_LENGTH) {
-    adTitle.setCustomValidity(`Ещё ${  MIN_TITLE_LENGTH - valueLength } симв.`);
-  } else if (valueLength > MAX_TITLE_LENGTH) {
-    adTitle.setCustomValidity(`Удалите лишние ${  valueLength - MAX_TITLE_LENGTH } симв.`);
+  if (valueLength < MIN_TITLE_LENGTH || valueLength > MAX_TITLE_LENGTH ) {
+    const message = valueLength < MIN_TITLE_LENGTH ? `Ещё ${ MIN_TITLE_LENGTH - valueLength } симв.` : `Удалите лишние ${ valueLength - MAX_TITLE_LENGTH } симв.`;
+    input.setCustomValidity(message);
   } else {
-    adTitle.setCustomValidity('');
+    input.setCustomValidity('');
   }
 
   adTitle.reportValidity();
@@ -59,8 +59,8 @@ adTitle.addEventListener('input', () => {
 const adPrice = adForm.querySelector('input[name="price"]');
 const MAX_PRICE = 1000000;
 
-adPrice.addEventListener('input', () => {
-  const value = adPrice.value;
+adPrice.addEventListener('input', (event) => {
+  const value = event.target.value;
   const minPrice = adPrice.min;
 
   if (value < minPrice) {
@@ -75,29 +75,34 @@ adPrice.addEventListener('input', () => {
 });
 
 //Смена минимальной цены в зависимости от типа жилья
-const getMinPriceFromType = () => {
-  const offerTypeContainer = adForm.querySelector('#type');
-  offerTypeContainer.addEventListener('change', function() {
-    if (this.value === 'bungalow') {
+const setMinPriceFromType = ( event ) => {
+  const value = event.target.value;
+  switch( value ) {
+    case 'bungalow':
       adPrice.placeholder = '0';
       adPrice.min = '0';
-    } if (this.value === 'flat') {
+      break;
+    case 'flat':
       adPrice.placeholder = '1000';
       adPrice.min = '1000';
-    } if (this.value === 'hotel') {
+      break;
+    case 'hotel':
       adPrice.placeholder = '3000';
       adPrice.min = '3000';
-    } if (this.value === 'house') {
+      break;
+    case 'house':
       adPrice.placeholder = '5000';
       adPrice.min = '5000';
-    } if (this.value === 'palace') {
+      break;
+    case 'palace':
       adPrice.placeholder = '10000';
       adPrice.min = '10000';
-    }
-  });
+      break;
+    default:
+  }
 };
-
-getMinPriceFromType();
+const offerTypeContainer = adForm.querySelector('#type');
+offerTypeContainer.addEventListener('change', setMinPriceFromType );
 
 //Смена количества гостей от числа комнат
 const selectRoomNumber = adForm.querySelector('#room_number');
@@ -105,89 +110,57 @@ const selectCapacity= adForm.querySelector('#capacity');
 
 const disableAllOptions = () => {
   const selectCapacityOptions = selectCapacity.querySelectorAll('option');
-  selectCapacityOptions.forEach((option)=> {
+  selectCapacityOptions.forEach( (option) => {
     option.setAttribute('disabled', '');
-  });
+  } );
 };
 disableAllOptions();
 
 selectCapacity.querySelector('option[value="1"]').removeAttribute('disabled');
-
-const onSelectRoomNumberChange = (evt) => {
+const onSelectRoomNumberChange = ( event ) => {
+  const roomCount = event.target.value;
   disableAllOptions();
-  switch (evt.target.value){
+  switch ( roomCount ){
     case '1':
       selectCapacity.querySelector( 'option[value="1"]' ).removeAttribute('disabled');
+      selectCapacity.value = '1';
       break;
     case '2':
       selectCapacity.querySelector( 'option[value="1"]' ).removeAttribute('disabled');
       selectCapacity.querySelector( 'option[value="2"]' ).removeAttribute('disabled');
+      selectCapacity.value = '2';
       break;
     case '3':
       selectCapacity.querySelector( 'option[value="1"]' ).removeAttribute('disabled');
       selectCapacity.querySelector( 'option[value="2"]' ).removeAttribute('disabled');
       selectCapacity.querySelector( 'option[value="3"]' ).removeAttribute('disabled');
+      selectCapacity.value = '3';
       break;
     case '100':
       selectCapacity.querySelector( 'option[value="0"]' ).removeAttribute('disabled');
+      selectCapacity.value = '0';
       break;
 
     default:
   }
+
 };
 
-selectRoomNumber.addEventListener('change', onSelectRoomNumberChange);
+selectRoomNumber.addEventListener( 'change', onSelectRoomNumberChange );
 
 //«Время заезда», «Время выезда» — выбор опции одного поля автоматически изменят значение другого.
 const selectTimeIn = adForm.querySelector('#timein');
 const selectTimeOut= adForm.querySelector('#timeout');
 
-const getTimeOut = (evt) => {
-  switch (evt.target.value){
-    case '12:00':
-      selectTimeOut.querySelector( 'option[value="12:00"]' ).setAttribute('selected', '');
-      selectTimeOut.querySelector( 'option[value="13:00"]' ).removeAttribute('selected');
-      selectTimeOut.querySelector( 'option[value="14:00"]' ).removeAttribute('selected');
-      break;
-    case '13:00':
-      selectTimeOut.querySelector( 'option[value="13:00"]' ).setAttribute('selected', '');
-      selectTimeOut.querySelector( 'option[value="12:00"]' ).removeAttribute('selected');
-      selectTimeOut.querySelector( 'option[value="14:00"]' ).removeAttribute('selected');
-      break;
-    case '14:00':
-      selectTimeOut.querySelector( 'option[value="14:00"]' ).setAttribute('selected', '');
-      selectTimeOut.querySelector( 'option[value="12:00"]' ).removeAttribute('selected');
-      selectTimeOut.querySelector( 'option[value="13:00"]' ).removeAttribute('selected');
-      break;
-
-    default:
-  }
+const syncTimeInOut = ( event, element ) => {
+  const value = event.target.value;
+  element.value = value;
 };
 
-selectTimeIn.addEventListener('change', getTimeOut);
+selectTimeIn.addEventListener( 'change', ( event ) => { syncTimeInOut ( event, selectTimeOut ); } );
+selectTimeOut.addEventListener( 'change', ( event ) => { syncTimeInOut ( event, selectTimeIn ); } );
 
-const getTimeIn = (evt) => {
-  switch (evt.target.value){
-    case '12:00':
-      selectTimeIn.querySelector( 'option[value="12:00"]' ).setAttribute('selected', '');
-      selectTimeIn.querySelector( 'option[value="13:00"]' ).removeAttribute('selected');
-      selectTimeIn.querySelector( 'option[value="14:00"]' ).removeAttribute('selected');
-      break;
-    case '13:00':
-      selectTimeIn.querySelector( 'option[value="13:00"]' ).setAttribute('selected', '');
-      selectTimeIn.querySelector( 'option[value="12:00"]' ).removeAttribute('selected');
-      selectTimeIn.querySelector( 'option[value="14:00"]' ).removeAttribute('selected');
-      break;
-    case '14:00':
-      selectTimeIn.querySelector( 'option[value="14:00"]' ).setAttribute('selected', '');
-      selectTimeIn.querySelector( 'option[value="12:00"]' ).removeAttribute('selected');
-      selectTimeIn.querySelector( 'option[value="13:00"]' ).removeAttribute('selected');
-      break;
-
-    default:
-  }
+export{
+  setDisabledState,
+  setEnabledState
 };
-
-selectTimeOut.addEventListener('change', getTimeIn);
-
-export{setDisabledState, setEnabledState};
