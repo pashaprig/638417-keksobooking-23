@@ -56,7 +56,7 @@ adTitle.addEventListener('input', (event) => {
 });
 
 //Валидация цены в обьявлении
-const adPrice = adForm.querySelector('input[name="price"]');
+const adPrice = adForm.querySelector('#price');
 const MAX_PRICE = 1000000;
 
 adPrice.addEventListener('input', (event) => {
@@ -143,7 +143,6 @@ const onSelectRoomNumberChange = ( event ) => {
 
     default:
   }
-
 };
 
 selectRoomNumber.addEventListener( 'change', onSelectRoomNumberChange );
