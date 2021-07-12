@@ -19,7 +19,7 @@ function getOfferType(offerType) {
   }
 }
 
-export const getNewAd = (advertisement) => {
+export const getNewAd = ( advertisement ) => {
   const ad = cardTemplate.cloneNode(true);
   const featureList = ad.querySelector('.popup__features');
   const photos = ad.querySelector('.popup__photos');
