@@ -5,8 +5,6 @@ const setDisabledState = () => {
   // Форма заполнения информации об объявлении .ad-form содержит класс ad-form--disabled;
   adForm.classList.add( 'ad-form--disabled');
 
-  // console.log( 'setDisabledState', adForm );
-
   // Все интерактивные элементы формы .ad-form должны быть заблокированы с помощью атрибута disabled, добавленного на них или на их родительские блоки fieldset;
   const fieldsets = adForm.querySelectorAll( 'fieldset');
   fieldsets.forEach( ( fieldset )=> {
@@ -23,8 +21,6 @@ const setDisabledState = () => {
 };
 
 const setEnabledState = () => {
-
-  // console.log( 'setEnabledState', adForm );
 
   adForm.classList.remove('ad-form--disabled');
 

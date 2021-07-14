@@ -1,6 +1,4 @@
 import { createAd } from './createAd.js';
-
-import './map.js';
 import { createAdMarkersOnMap } from './map.js';
 
 const SIMILAR_AD_COUNT = 5;

@@ -1,6 +1,6 @@
 import { setDisabledState, setEnabledState, setAddressInputCoordinates } from './form.js';
 
-import { getNewAd } from './newAd.js';
+import { createAdCard } from './newAd.js';
 
 setDisabledState();
 
@@ -26,10 +26,13 @@ L.tileLayer(
 ).addTo(map);
 
 // pins
+const MAIN_PIN_WHIDTH_HEIGHT = 52;
+const PIN_WHIDTH_HEIGHT = 40;
+
 const mainPinIcon = L.icon({
   iconUrl: '../img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconSize: [MAIN_PIN_WHIDTH_HEIGHT, MAIN_PIN_WHIDTH_HEIGHT],
+  iconAnchor: [Math.floor(MAIN_PIN_WHIDTH_HEIGHT/2), MAIN_PIN_WHIDTH_HEIGHT],
 });
 
 const marker = L.marker(
@@ -44,19 +47,21 @@ const marker = L.marker(
 );
 marker.addTo(map);
 
-//снимает координаті с метки
+//снимает координаты с метки
+const DECIMAL_PLACES = 5;
+
 marker.on('moveend', (evt) => {
   const coordinatesObj = evt.target.getLatLng();
-  setAddressInputCoordinates( `${ coordinatesObj.lat.toFixed( 5 ) }, ${ coordinatesObj.lng.toFixed( 5 ) }` );
+  const newCordinates = `${ coordinatesObj.lat.toFixed( DECIMAL_PLACES ) }, ${ coordinatesObj.lng.toFixed( DECIMAL_PLACES ) }`;
+  setAddressInputCoordinates(newCordinates );
 });
-
 
 const createAdMarkersOnMap = ( array ) => {
   array.forEach( ( advertisement ) => {
     const adPinIcon = L.icon( {
       iconUrl: '../img/pin.svg',
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
+      iconSize: [PIN_WHIDTH_HEIGHT, PIN_WHIDTH_HEIGHT],
+      iconAnchor: [Math.floor(PIN_WHIDTH_HEIGHT/2), PIN_WHIDTH_HEIGHT],
     } );
 
     const adsMarker = L.marker(
@@ -71,7 +76,7 @@ const createAdMarkersOnMap = ( array ) => {
     adsMarker
       .addTo(map)
       .bindPopup(
-        getNewAd( advertisement ),
+        createAdCard ( advertisement ),
         {
           keepInView: true,
         },
