@@ -21,6 +21,7 @@ const setDisabledState = () => {
 };
 
 const setEnabledState = () => {
+
   adForm.classList.remove('ad-form--disabled');
 
   const fieldsets = adForm.querySelectorAll('fieldset');
@@ -159,7 +160,13 @@ const syncTimeInOut = ( event, element ) => {
 selectTimeIn.addEventListener( 'change', ( event ) => { syncTimeInOut ( event, selectTimeOut ); } );
 selectTimeOut.addEventListener( 'change', ( event ) => { syncTimeInOut ( event, selectTimeIn ); } );
 
+const setAddressInputCoordinates = ( value ) => {
+  const addressInput = adForm.querySelector( '#address' );
+  addressInput.value = value;
+};
+
 export{
   setDisabledState,
-  setEnabledState
+  setEnabledState,
+  setAddressInputCoordinates
 };
