@@ -1,5 +1,11 @@
 const adForm = document.querySelector('.ad-form');
 const mapFiltersForm = document.querySelector( '.map__filters');
+const buttonReset = adForm.querySelector('.ad-form__reset');
+
+buttonReset.addEventListener('click', ( event )=> {
+  event.preventDefault();
+} );
+
 const setDisabledState = () => {
 
   // Форма заполнения информации об объявлении .ad-form содержит класс ad-form--disabled;

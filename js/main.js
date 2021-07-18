@@ -1,7 +1,9 @@
-import { createAd } from './createAd.js';
-import { createAdMarkersOnMap } from './map.js';
+// import { generateAdData } from './generateAdData.js';
 
-const SIMILAR_AD_COUNT = 5;
+import './fetchAdData.js';
 
-const simalarAds = new Array( SIMILAR_AD_COUNT ).fill(null).map(() => createAd());
-createAdMarkersOnMap(simalarAds);
+// const SIMILAR_AD_COUNT = 5;
+// const simalarAds = new Array( SIMILAR_AD_COUNT ).fill(null).map(() => generateAdData());
+// createAdMarkersOnMap(simalarAds);
+
+
