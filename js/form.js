@@ -1,10 +1,11 @@
-const adForm = document.querySelector('.ad-form');
+import { TOKYO_LAT, TOKYO_LNG, setMarkerToCoordinates } from './map.js';
+import { isEscEvent } from './util.js';
+
+const adForm = document.querySelector( '.ad-form' );
 const mapFiltersForm = document.querySelector( '.map__filters');
 const buttonReset = adForm.querySelector('.ad-form__reset');
-
-buttonReset.addEventListener('click', ( event )=> {
-  event.preventDefault();
-} );
+const successTemplate = document.querySelector('#success').content;
+const errorTemplate = document.querySelector('#error').content;
 
 const setDisabledState = () => {
 
@@ -170,6 +171,90 @@ const setAddressInputCoordinates = ( value ) => {
   const addressInput = adForm.querySelector( '#address' );
   addressInput.value = value;
 };
+
+const resetForm = () => {
+  adForm.reset();
+  const newCoordinates = `${ TOKYO_LAT }, ${ TOKYO_LNG }`;
+  setAddressInputCoordinates( newCoordinates );
+  setMarkerToCoordinates( TOKYO_LAT,TOKYO_LNG );
+};
+
+const onModalClick = ( event ) => {
+  event.target.removeEventListener( 'click', onModalClick );
+  event.target.remove();
+};
+
+const onModalSuccessKeyDown = ( event ) => {
+  if ( isEscEvent( event ) ){
+    document.querySelector( '.success' ).remove();
+    document.removeEventListener( 'keypress', onModalSuccessKeyDown );
+  }
+};
+
+const onModalErrorKeyDown = ( event ) => {
+  if ( isEscEvent( event ) ){
+    document.querySelector( '.error' ).remove();
+    document.removeEventListener( 'keypress', onModalErrorKeyDown );
+  }
+};
+
+const onButtonErrorClick = ( event ) => {
+  event.target.parentNode.remove();
+};
+
+const createModalSuccess = () => {
+  const template = successTemplate.querySelector('.success');
+  const modal = template.cloneNode( true );
+  document.body.appendChild(modal);
+
+  modal.addEventListener( 'click', onModalClick );
+  document.addEventListener( 'keydown', onModalSuccessKeyDown );
+};
+
+const createModalError = () => {
+  const template = errorTemplate.querySelector('.error');
+  const modal = template.cloneNode( true );
+  document.body.appendChild(modal);
+
+  const buttonError = document.querySelector( '.error__button');
+  modal.addEventListener( 'click', onModalClick );
+  buttonError.addEventListener( 'click', onButtonErrorClick );
+  document.addEventListener( 'keydown', onModalErrorKeyDown );
+};
+
+
+buttonReset.addEventListener('click', ( event )=> {
+  event.preventDefault();
+  resetForm();
+} );
+
+adForm.addEventListener( 'submit', ( event ) => {
+  event.preventDefault();
+
+  const formData = new FormData( event.target );
+
+  fetch(
+    'https://23.javascript.pages.academy/keksobooking',
+    {
+      method: 'POST',
+      mode: 'no-cors',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      body: formData,
+    },
+  )
+    .then((response) => {
+      resetForm();
+      createModalSuccess();
+    })
+    .catch((error) => {
+      createModalError();
+    });
+
+});
+
 
 export{
   setDisabledState,

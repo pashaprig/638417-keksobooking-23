@@ -53,8 +53,13 @@ const DECIMAL_PLACES = 5;
 marker.on('moveend', ( event ) => {
   const coordinatesObj = event.target.getLatLng();
   const newCordinates = `${ coordinatesObj.lat.toFixed( DECIMAL_PLACES ) }, ${ coordinatesObj.lng.toFixed( DECIMAL_PLACES ) }`;
-  setAddressInputCoordinates(newCordinates );
+  setAddressInputCoordinates( newCordinates );
 });
+
+const setMarkerToCoordinates = ( lat, lng ) => {
+  const newLatLng = new L.LatLng( lat, lng );
+  marker.setLatLng( newLatLng );
+};
 
 const createAdMarkersOnMap = ( array ) => {
   // console.log( 'createAdMarkersOnMap', array );
@@ -87,5 +92,8 @@ const createAdMarkersOnMap = ( array ) => {
 };
 
 export{
-  createAdMarkersOnMap
+  createAdMarkersOnMap,
+  setMarkerToCoordinates,
+  TOKYO_LAT,
+  TOKYO_LNG
 };
