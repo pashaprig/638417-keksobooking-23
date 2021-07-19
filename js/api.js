@@ -6,7 +6,6 @@ const getData = ( onSuccess, onFail ) => {
   fetch(GET_DATA_URL)
     .then( (response) => response.json())
     .then( ( ads ) => {
-      // throw new Error( 'no Data');
       onSuccess( ads );
     })
     .catch( (error) => {
@@ -19,11 +18,6 @@ const sendData = ( onSuccess, onFail, body ) => {
     SEND_DATA_URL,
     {
       method: 'POST',
-      // mode: 'no-cors',
-      // credentials: 'same-origin',
-      // headers: {
-      //   'Content-Type': 'multipart/form-data',
-      // },
       body: body,
     },
   )
@@ -39,6 +33,5 @@ const sendData = ( onSuccess, onFail, body ) => {
     });
 
 };
-
 
 export {getData, sendData};
