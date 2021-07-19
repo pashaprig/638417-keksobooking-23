@@ -1,9 +1,15 @@
-// import { generateAdData } from './generateAdData.js';
-
-import './fetchAdData.js';
-
-// const SIMILAR_AD_COUNT = 5;
-// const simalarAds = new Array( SIMILAR_AD_COUNT ).fill(null).map(() => generateAdData());
-// createAdMarkersOnMap(simalarAds);
 
 
+import { getData } from './api.js';
+import { createAdMarkersOnMap } from './map.js';
+// import { createModalError} from  './form.js';
+import { showAlert } from './util.js';
+
+getData(
+  ( ads ) => {
+    createAdMarkersOnMap( ads );
+  },
+  ( error ) => {
+    showAlert( error );
+  },
+);

@@ -30,8 +30,8 @@ function getTwoDigitNumber(photoNumber) {
   return (photoNumber < 10) ? `0${  photoNumber}` : photoNumber;
 }
 
-const ALERT_SHOW_TIME = 5000;
 
+const ALERT_SHOW_TIME = 5000;
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = 100;
@@ -53,4 +53,6 @@ const showAlert = (message) => {
 
 const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
-export {getRandomInt, getRandomFloat, getRandomArrayElement, getTwoDigitNumber, showAlert, isEscEvent};
+export {getRandomInt, getRandomFloat, getRandomArrayElement, getTwoDigitNumber,
+  showAlert,
+  isEscEvent};

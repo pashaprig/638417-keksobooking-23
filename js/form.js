@@ -1,5 +1,6 @@
 import { TOKYO_LAT, TOKYO_LNG, setMarkerToCoordinates } from './map.js';
 import { isEscEvent } from './util.js';
+import { sendData } from './api.js';
 
 const adForm = document.querySelector( '.ad-form' );
 const mapFiltersForm = document.querySelector( '.map__filters');
@@ -174,6 +175,7 @@ const setAddressInputCoordinates = ( value ) => {
 
 const resetForm = () => {
   adForm.reset();
+  mapFiltersForm.reset();
   const newCoordinates = `${ TOKYO_LAT }, ${ TOKYO_LNG }`;
   setAddressInputCoordinates( newCoordinates );
   setMarkerToCoordinates( TOKYO_LAT,TOKYO_LNG );
@@ -228,36 +230,31 @@ buttonReset.addEventListener('click', ( event )=> {
   resetForm();
 } );
 
-adForm.addEventListener( 'submit', ( event ) => {
-  event.preventDefault();
+adForm.addEventListener(
+  'submit',
+  ( event ) => {
+    event.preventDefault();
 
-  const formData = new FormData( event.target );
+    const formData = new FormData( event.target );
 
-  fetch(
-    'https://23.javascript.pages.academy/keksobooking',
-    {
-      method: 'POST',
-      mode: 'no-cors',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'multipart/form-data',
+    sendData (
+      () => {
+        createModalSuccess();
+        resetForm();
       },
-      body: formData,
-    },
-  )
-    .then((response) => {
-      resetForm();
-      createModalSuccess();
-    })
-    .catch((error) => {
-      createModalError();
-    });
-
-});
+      ( error ) => {
+        createModalError();
+      },
+      formData,
+    );
+  },
+);
 
 
 export{
   setDisabledState,
   setEnabledState,
-  setAddressInputCoordinates
+  setAddressInputCoordinates,
+  createModalSuccess,
+  createModalError
 };
