@@ -61,7 +61,6 @@ const setMarkerToCoordinates = ( lat, lng ) => {
 };
 
 const createAdMarkersOnMap = ( array ) => {
-  // console.log( 'createAdMarkersOnMap', array );
   array.forEach( ( advertisement ) => {
     const adPinIcon = L.icon( {
       iconUrl: '../img/pin.svg',
@@ -89,8 +88,6 @@ const createAdMarkersOnMap = ( array ) => {
   } );
 
 };
-
-// getData();
 
 export{
   createAdMarkersOnMap,
