@@ -1,6 +1,5 @@
 import { setDisabledState, setEnabledState, setAddressInputCoordinates } from './form.js';
 import { createAdCard } from './createAdCard.js';
-import { getData } from './api.js';
 
 setDisabledState();
 

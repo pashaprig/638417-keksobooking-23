@@ -238,7 +238,6 @@ adForm.addEventListener(
     const formData = new FormData( event.target );
 
     const addressValue = adForm.querySelector( '#address').value;
-    const capacityValue = adForm.querySelector( '#capacity').value;
 
     formData.append( 'address', addressValue );
 
@@ -247,7 +246,7 @@ adForm.addEventListener(
         createModalSuccess();
         resetForm();
       },
-      ( error ) => {
+      () => {
         createModalError();
       },
       formData,
