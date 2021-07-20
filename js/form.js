@@ -28,7 +28,7 @@ const setDisabledState = () => {
   });
 };
 
-const setEnabledState = () => {
+const setFormsEnabledState = () => {
 
   adForm.classList.remove('ad-form--disabled');
 
@@ -257,7 +257,7 @@ adForm.addEventListener(
 
 export{
   setDisabledState,
-  setEnabledState,
+  setFormsEnabledState,
   setAddressInputCoordinates,
   createModalSuccess,
   createModalError
