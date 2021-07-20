@@ -54,9 +54,9 @@ const MAX_LAT = 35.7;
 const MIN_LNG = 139.7;
 const MAX_LNG = 139.8;
 
-function createAd () {
-  const randomLat = getRandomFloat(MIN_LAT, MAX_LAT, 5);
-  const randomLng = getRandomFloat(MIN_LNG, MAX_LNG, 5);
+function generateAdData () {
+  const lat = getRandomFloat(MIN_LAT, MAX_LAT, 5);
+  const lng = getRandomFloat(MIN_LNG, MAX_LNG, 5);
 
   return {
     author: {
@@ -65,8 +65,8 @@ function createAd () {
     offer: {
       title: getRandomArrayElement(TITLE),
       address: {
-        randomLat,
-        randomLng,
+        lat,
+        lng,
       },
       price: getRandomInt(0, 10000),
       type: getRandomArrayElement(TYPE),
@@ -79,10 +79,10 @@ function createAd () {
       photos: [getRandomArrayElement(PHOTOS)],
     },
     location: {
-      randomLat,
-      randomLng,
+      lat,
+      lng,
     },
   };
 }
 
-export {createAd};
+export {generateAdData};

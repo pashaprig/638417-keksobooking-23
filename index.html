@@ -74,7 +74,14 @@
     <!-- Форма объявления -->
     <section class="notice">
       <h2 class="notice__title">Ваше объявление</h2>
-      <form class="ad-form" action="https://23.javascript.pages.academy/keksobooking" method="post" enctype="multipart/form-data" autocomplete="off">
+      <form
+        class="ad-form"
+        action="https://23.javascript.pages.academy/keksobooking"
+        method="post"
+        enctype="multipart/form-data"
+        autocomplete="off"
+        >
+        <!-- novalidate -->
         <fieldset class="ad-form-header">
           <legend class="ad-form-header__title">Ваша фотография (для карты)</legend>
           <div class="ad-form-header__upload">
@@ -137,7 +144,7 @@
           <select id="capacity" name="capacity">
             <option value="3">для 3 гостей</option>
             <option value="2">для 2 гостей</option>
-            <option value="1">для 1 гостя</option>
+            <option value="1" selected>для 1 гостя</option>
             <option value="0">не для гостей</option>
           </select>
         </fieldset>
@@ -232,6 +239,7 @@
       <button type="button" class="error__button">Попробовать снова</button>
     </div>
   </template>
+
 <script src="js/main.js" type="module"></script>
 <script src="leaflet/leaflet.js"
 integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="

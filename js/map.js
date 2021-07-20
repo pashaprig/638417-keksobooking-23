@@ -1,11 +1,10 @@
 import { setDisabledState, setEnabledState, setAddressInputCoordinates } from './form.js';
-
-import { createAdCard } from './newAd.js';
+import { createAdCard } from './createAdCard.js';
 
 setDisabledState();
 
-const TOKYO_LAT = 35.41371;
-const TOKYO_LNG = 139.41502;
+const TOKYO_LAT = 35.63693;
+const TOKYO_LNG = 139.78849;
 
 setAddressInputCoordinates( `${ TOKYO_LAT }, ${ TOKYO_LNG }` );
 
@@ -16,7 +15,7 @@ const map = L.map('map-canvas')
   .setView({
     lat: TOKYO_LAT,
     lng: TOKYO_LNG,
-  }, 8);
+  }, 12);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -50,11 +49,16 @@ marker.addTo(map);
 //снимает координаты с метки
 const DECIMAL_PLACES = 5;
 
-marker.on('moveend', (evt) => {
-  const coordinatesObj = evt.target.getLatLng();
+marker.on('moveend', ( event ) => {
+  const coordinatesObj = event.target.getLatLng();
   const newCordinates = `${ coordinatesObj.lat.toFixed( DECIMAL_PLACES ) }, ${ coordinatesObj.lng.toFixed( DECIMAL_PLACES ) }`;
-  setAddressInputCoordinates(newCordinates );
+  setAddressInputCoordinates( newCordinates );
 });
+
+const setMarkerToCoordinates = ( lat, lng ) => {
+  const newLatLng = new L.LatLng( lat, lng );
+  marker.setLatLng( newLatLng );
+};
 
 const createAdMarkersOnMap = ( array ) => {
   array.forEach( ( advertisement ) => {
@@ -66,8 +70,8 @@ const createAdMarkersOnMap = ( array ) => {
 
     const adsMarker = L.marker(
       {
-        lat: advertisement.location.randomLat,
-        lng: advertisement.location.randomLng,
+        lat: advertisement.location.lat,
+        lng: advertisement.location.lng,
       },
       {
         icon: adPinIcon,
@@ -86,5 +90,8 @@ const createAdMarkersOnMap = ( array ) => {
 };
 
 export{
-  createAdMarkersOnMap
+  createAdMarkersOnMap,
+  setMarkerToCoordinates,
+  TOKYO_LAT,
+  TOKYO_LNG
 };
