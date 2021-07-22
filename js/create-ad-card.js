@@ -1,6 +1,6 @@
 const cardTemplate = document.querySelector('#card').content;
 
-function getOfferType(offerType) {
+const getOfferType = ( offerType ) => {
   switch(offerType) {
     case 'flat':
       return 'Квартира';
@@ -17,7 +17,7 @@ function getOfferType(offerType) {
     case 'hotel':
       return 'Отель';
   }
-}
+};
 
 const createAdCard  = ( advertisement ) => {
   const ad = cardTemplate.cloneNode(true);

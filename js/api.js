@@ -3,11 +3,16 @@ const SEND_DATA_URL = 'https://23.javascript.pages.academy/keksobooking';
 
 const getData = ( onSuccess, onFail ) => {
   fetch(GET_DATA_URL)
-    .then( (response) => response.json())
+    .then( (response) => {
+      if(!response.ok){
+        throw new Error ('Ошибка загрузки данных с сервера.');
+      }
+      return response.json();
+    })
     .then( ( ads ) => {
       onSuccess( ads );
     })
-    .catch( (error) => {
+    .catch( ( error ) => {
       onFail( error );
     });
 };

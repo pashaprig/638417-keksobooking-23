@@ -1,5 +1,5 @@
 import { setDisabledState, setFormsEnabledState, setAddressInputCoordinates } from './form.js';
-import { createAdCard } from './createAdCard.js';
+import { createAdCard } from './create-ad-card.js';
 import { showAlert } from './util.js';
 import { getData } from './api.js';
 import { debounce } from './utils/debounce.js';
@@ -11,12 +11,17 @@ const AD_COUNT = 10;
 const adsArray = [];
 const formMapFilter = document.querySelector('.map__filters');
 const DEBOUNCE_TIME = 500;
+const DECIMAL_PLACES = 5;
+const PIN_WIDTH_HEIGHT = 40;
+const MAIN_PIN_WIDTH_HEIGHT = 52;
+const MIN_HOUSING_PRICE = 10000;
+const MAX_HOUSING_PRICE = 50000;
+
 
 setDisabledState();
 setAddressInputCoordinates( `${ TOKYO_LAT }, ${ TOKYO_LNG }` );
 
 //снимает координаты с метки
-const DECIMAL_PLACES = 5;
 
 const getFiltersObjectFromForm = () => {
   const filtersObj = {};
@@ -44,38 +49,6 @@ const filterAdsArray = ( array ) => {
   const filtersObj = getFiltersObjectFromForm();
 
   /**
-   * @description room type filter check
-   * @param {object} ad
-   * @returns {boolean} true/false
-  */
-  const roomTypeCheck = ( ad ) => {
-    const roomType = ad.offer.type;
-    switch( filtersObj[ 'housing-type'] ){
-      case 'any':
-        return true;
-      // Бунгало
-      case 'bungalow':
-        return roomType === 'bungalow';
-
-      // Квартира
-      case 'flat':
-        return roomType === 'flat';
-
-      // Отель
-      case 'hotel':
-        return roomType === 'hotel';
-
-      // Дом
-      case 'house':
-        return roomType === 'house';
-
-      //Дворец
-      case 'palace':
-        return roomType === 'palace';
-    }
-  };
-
-  /**
    * @description price filter check
    * @param {object} ad
    * @returns {boolean} true/false
@@ -85,18 +58,29 @@ const filterAdsArray = ( array ) => {
     switch( filtersObj[ 'housing-price'] ){
       case 'any':
         return true;
-      // 10000 - 50000
+        // 10000 - 50000
       case 'middle':
-        return price >= 10000 && price <= 50000;
+        return price >= MIN_HOUSING_PRICE && price <= MAX_HOUSING_PRICE;
 
-      // до 10000₽
+        // до 10000₽
       case 'low':
-        return price < 10000;
+        return price < MIN_HOUSING_PRICE;
 
-      // от 50000₽
+        // от 50000₽
       case 'high':
-        return price > 50000;
+        return price > MAX_HOUSING_PRICE;
     }
+  };
+
+  /**
+   * @description room type filter check
+   * @param {object} ad
+   * @returns {boolean} true/false
+  */
+  const roomTypeCheck = ( ad ) => {
+    const roomType = ad.offer.type;
+
+    return filtersObj[ 'housing-type'] === 'any' ? true : roomType === filtersObj[ 'housing-type'];
   };
 
   /**
@@ -106,23 +90,7 @@ const filterAdsArray = ( array ) => {
   */
   const roomNumberCheck = ( ad ) => {
     const rooms = ad.offer.rooms;
-
-    switch( filtersObj[ 'housing-rooms'] ){
-      // Любое число комнат
-      case 'any':
-        return true;
-      // Одна комната
-      case '1':
-        return rooms === 1;
-
-      // Две комнаты
-      case '2':
-        return rooms === 2;
-
-      // Три комнаты
-      case '3':
-        return rooms === 3;
-    }
+    return filtersObj[ 'housing-rooms'] === 'any' ? true : rooms === ( filtersObj[ 'housing-rooms']*1 );
   };
 
   /**
@@ -132,20 +100,7 @@ const filterAdsArray = ( array ) => {
   */
   const guestNumberCheck = ( ad ) => {
     const guestNumber = ad.offer.guests;
-    switch( filtersObj[ 'housing-guests'] ){
-      // Любое число гостей
-      case 'any':
-        return true;
-      // Не для гостей
-      case '0':
-        return guestNumber === 0;
-      // Один гость
-      case '1':
-        return guestNumber === 1;
-      // Два гостя
-      case '2':
-        return guestNumber === 2;
-    }
+    return filtersObj[ 'housing-guests'] === 'any' ? true : guestNumber === ( filtersObj[ 'housing-guests']*1 ) ;
   };
 
   /**
@@ -166,8 +121,7 @@ const filterAdsArray = ( array ) => {
     return conditionerCheck && dishwasherCheck && elevatorCheck && parkingCheck && washerCheck && wifiCheck;
   };
 
-
-  const arrayFiltered = array.filter( ( item ) => priceCheck( item ) && roomNumberCheck( item ) && roomTypeCheck(item) && guestNumberCheck( item ) && featuresCheck( item ) );
+  const arrayFiltered = array.filter( ( item ) => roomTypeCheck(item) && priceCheck( item ) && roomNumberCheck( item ) && guestNumberCheck( item ) && featuresCheck( item ) );
   return arrayFiltered;
 };
 
@@ -178,7 +132,6 @@ const map = L.map('map-canvas');
 
 // AD MARKERS
 const createAdMarkersOnMap = ( array ) => {
-  const PIN_WIDTH_HEIGHT = 40;
   array
     .slice(0, AD_COUNT) // Вывести на карту не более 10 меток. Ограничение по количеству должно происходить сразу после получения данных с сервера.
     .forEach( ( advertisement ) => {
@@ -240,7 +193,6 @@ L.tileLayer(
 ).addTo(map);
 
 // MAIN MARKER
-const MAIN_PIN_WIDTH_HEIGHT = 52;
 const mainPinIcon = L.icon({
   iconUrl: '../img/main-pin.svg',
   iconSize: [MAIN_PIN_WIDTH_HEIGHT, MAIN_PIN_WIDTH_HEIGHT],
@@ -269,7 +221,6 @@ const setMarkerToCoordinates = ( lat, lng ) => {
 };
 
 const onFormMapFilterChange = () => {
-  // console.log('debounce');
   const adsFiltered = filterAdsArray( adsArray );
   // delete old markers
   markersGroup.clearLayers();
@@ -283,7 +234,6 @@ formMapFilter.addEventListener( 'change',
     DEBOUNCE_TIME,
   ),
 );
-
 
 export{
   createAdMarkersOnMap,

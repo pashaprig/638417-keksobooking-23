@@ -1,12 +1,36 @@
 import { TOKYO_LAT, TOKYO_LNG, setMarkerToCoordinates } from './map.js';
 import { isEscEvent } from './util.js';
 import { sendData } from './api.js';
+import { getPreview } from './avatar.js';
+
+const MIN_TITLE_LENGTH = 30;
+const MAX_TITLE_LENGTH = 100;
+const MAX_PRICE = 1000000;
+const FLAT_PRICE = 1000;
+const HOTEL_PRICE = 3000;
+const HOUSE_PRICE = 5000;
+const PALACE_PRICE = 10000;
 
 const adForm = document.querySelector( '.ad-form' );
 const mapFiltersForm = document.querySelector( '.map__filters');
 const buttonReset = adForm.querySelector('.ad-form__reset');
 const successTemplate = document.querySelector('#success').content;
 const errorTemplate = document.querySelector('#error').content;
+
+
+//Аватарка пользователя
+const avatarChooser = document.querySelector('#avatar');
+const avatatPreviewBlock = document.querySelector('.ad-form-header__preview');
+const avatarPreview = avatatPreviewBlock.querySelector('img');
+
+//Фотография жилья
+const adPhotoChooser = document.querySelector('#images');
+const adPreviewBlock = document.querySelector('.ad-form__photo');
+const adPreview = adPreviewBlock.querySelector('img');
+
+//Отображение превьюшек
+getPreview(avatarChooser, avatarPreview);
+getPreview(adPhotoChooser, adPreview);
 
 const setDisabledState = () => {
 
@@ -47,8 +71,6 @@ const setFormsEnabledState = () => {
 
 //Валидация заголовка обьявления
 const adTitle = adForm.querySelector('#title');
-const MIN_TITLE_LENGTH = 30;
-const MAX_TITLE_LENGTH = 100;
 
 adTitle.addEventListener('input', (event) => {
   const input = event.target;
@@ -66,12 +88,11 @@ adTitle.addEventListener('input', (event) => {
 
 //Валидация цены в обьявлении
 const adPrice = adForm.querySelector('#price');
-const MAX_PRICE = 1000000;
+
 
 adPrice.addEventListener('input', (event) => {
   const value = event.target.value;
   const minPrice = adPrice.min;
-
   if (value < minPrice) {
     adPrice.setCustomValidity(`Ещё ${ minPrice - value } руб. до минимальной цены`);
   } else if (value > MAX_PRICE) {
@@ -84,7 +105,7 @@ adPrice.addEventListener('input', (event) => {
 });
 
 //Смена минимальной цены в зависимости от типа жилья
-const setMinPriceFromType = ( event ) => {
+const onOfferTypeChange = ( event ) => {
   const value = event.target.value;
   switch( value ) {
     case 'bungalow':
@@ -92,26 +113,26 @@ const setMinPriceFromType = ( event ) => {
       adPrice.min = '0';
       break;
     case 'flat':
-      adPrice.placeholder = '1000';
-      adPrice.min = '1000';
+      adPrice.placeholder = FLAT_PRICE;
+      adPrice.min = FLAT_PRICE;
       break;
     case 'hotel':
-      adPrice.placeholder = '3000';
-      adPrice.min = '3000';
+      adPrice.placeholder = HOTEL_PRICE;
+      adPrice.min = HOTEL_PRICE;
       break;
     case 'house':
-      adPrice.placeholder = '5000';
-      adPrice.min = '5000';
+      adPrice.placeholder = HOUSE_PRICE;
+      adPrice.min = HOUSE_PRICE;
       break;
     case 'palace':
-      adPrice.placeholder = '10000';
-      adPrice.min = '10000';
+      adPrice.placeholder = PALACE_PRICE;
+      adPrice.min = PALACE_PRICE;
       break;
     default:
   }
 };
 const offerTypeContainer = adForm.querySelector('#type');
-offerTypeContainer.addEventListener('change', setMinPriceFromType );
+offerTypeContainer.addEventListener('change', onOfferTypeChange );
 
 //Смена количества гостей от числа комнат
 const selectRoomNumber = adForm.querySelector('#room_number');
