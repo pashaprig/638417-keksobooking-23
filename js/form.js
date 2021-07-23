@@ -10,6 +10,7 @@ const FLAT_PRICE = 1000;
 const HOTEL_PRICE = 3000;
 const HOUSE_PRICE = 5000;
 const PALACE_PRICE = 10000;
+const DEFAULT_PREVIEW = 'img/muffin-grey.svg';
 
 const adForm = document.querySelector( '.ad-form' );
 const mapFiltersForm = document.querySelector( '.map__filters');
@@ -197,6 +198,8 @@ const setAddressInputCoordinates = ( value ) => {
 const resetForm = () => {
   adForm.reset();
   mapFiltersForm.reset();
+  avatarPreview.src = DEFAULT_PREVIEW;
+  adPreview.src = DEFAULT_PREVIEW;
   const newCoordinates = `${ TOKYO_LAT }, ${ TOKYO_LNG }`;
   setAddressInputCoordinates( newCoordinates );
   setMarkerToCoordinates( TOKYO_LAT,TOKYO_LNG );
